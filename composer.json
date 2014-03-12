@@ -16,6 +16,9 @@
             "email": "andrew@gathercontent.com"
         }
     ],
+    "require": {
+        "cogpowered/finediff": "0.0.1"
+    },
     "require-dev": {
         "phpunit/phpunit": "4.*",
         "squizlabs/php_codesniffer": "1.*"
