@@ -4,6 +4,10 @@ namespace Gathercontent\Htmldiff;
 
 class Htmldiff {
 
+    const DIFF_DELETE = -1;
+    const DIFF_INSERT = 1;
+    const DIFF_EQUAL  = 0;
+
     private $attributes = array();
 
     private $old = '';
@@ -29,13 +33,6 @@ class Htmldiff {
         'blanklineEndRegex' => '/\n\r?\n$/',
         'blanklineStartRegex' => '/^\r?\n\r?\n/'
     );
-
-    public function __construct () {
-
-        define('DIFF_DELETE', -1);
-        define('DIFF_INSERT', 1);
-        define('DIFF_EQUAL', 0);
-    }
 
     private function clean_html($html) {
         $html = trim($html);
@@ -344,13 +341,13 @@ class Htmldiff {
             }
 
             if($ins) {
-                $adding_val = DIFF_INSERT;
+                $adding_val = self::DIFF_INSERT;
             }
             elseif($del) {
-                $adding_val = DIFF_DELETE;
+                $adding_val = self::DIFF_DELETE;
             }
             else {
-                $adding_val = DIFF_EQUAL;
+                $adding_val = self::DIFF_EQUAL;
             }
 
             if($matches[3][$i] == '-'){
@@ -374,7 +371,7 @@ class Htmldiff {
         foreach($cleanup as $clean) {
 
             switch($clean[0]) {
-                case DIFF_DELETE:
+                case self::DIFF_DELETE:
                     if($this->adding) {
                         $this->close_to_tag('ins.diff');
                     }
@@ -382,7 +379,7 @@ class Htmldiff {
                         $this->open_new_elements('del.diff');
                     }
                     break;
-                case DIFF_INSERT:
+                case self::DIFF_INSERT:
                     if($this->deleting) {
                         $this->close_to_tag('del.diff');
                     }
@@ -390,7 +387,7 @@ class Htmldiff {
                         $this->open_new_elements('ins.diff');
                     }
                     break;
-                case DIFF_EQUAL:
+                case self::DIFF_EQUAL:
                     if($this->deleting) {
                         $this->close_to_tag('del.diff');
                     }
@@ -426,7 +423,7 @@ class Htmldiff {
 
         while($pointer < count($diffs)) {
 
-            if($diffs[$pointer][0] == DIFF_EQUAL) {
+            if($diffs[$pointer][0] == self::DIFF_EQUAL) {
                 $equalities[$equalitiesLength++] = $pointer;
                 $length_insertions1 = $length_insertions2;
                 $length_deletions1 = $length_deletions2;
@@ -436,7 +433,7 @@ class Htmldiff {
             }
             else {
 
-                if($diffs[$pointer][0] == DIFF_INSERT) {
+                if($diffs[$pointer][0] == self::DIFF_INSERT) {
                     $length_insertions2 += strlen($diffs[$pointer][1]);
                 }
                 else {
@@ -445,8 +442,8 @@ class Htmldiff {
 
                 if($lastequality && (strlen($lastequality) <= max($length_insertions1, $length_deletions1)) &&
                     (strlen($lastequality) <= max($length_insertions2, $length_deletions2))) {
-                    array_splice($diffs, $equalities[$equalitiesLength - 1], 0, array(array(DIFF_DELETE, $lastequality)));
-                    $diffs[$equalities[$equalitiesLength - 1] + 1][0] = DIFF_INSERT;
+                    array_splice($diffs, $equalities[$equalitiesLength - 1], 0, array(array(self::DIFF_DELETE, $lastequality)));
+                    $diffs[$equalities[$equalitiesLength - 1] + 1][0] = self::DIFF_INSERT;
                     $equalitiesLength--;
                     $equalitiesLength--;
                     $pointer = $equalitiesLength > 0 ? $equalities[$equalitiesLength - 1] : -1;
@@ -467,8 +464,8 @@ class Htmldiff {
         $pointer = 1;
         while($pointer < count($diffs)){
 
-            if($diffs[$pointer - 1][0] == DIFF_DELETE &&
-                $diffs[$pointer][0] == DIFF_INSERT) {
+            if($diffs[$pointer - 1][0] == self::DIFF_DELETE &&
+                $diffs[$pointer][0] == self::DIFF_INSERT) {
                 $deletion = $diffs[$pointer - 1][1];
                 $insertion = $diffs[$pointer][1];
                 $overlap_length1 = $this->diff_commonOverlap_($deletion, $insertion);
@@ -477,7 +474,7 @@ class Htmldiff {
                 if($overlap_length1 >= $overlap_length2) {
                     if($overlap_length1 >= strlen($deletion) / 2 ||
                         $overlap_length1 >= strlen($insertion) / 2) {
-                        array_splice($diffs, $pointer, 0, array(array(DIFF_EQUAL, substr($insertion, 0, $overlap_length1))));
+                        array_splice($diffs, $pointer, 0, array(array(self::DIFF_EQUAL, substr($insertion, 0, $overlap_length1))));
                         $diffs[$pointer - 1][1] = substr($deletion, 0, strlen($deletion) - $overlap_length1);
                         $diffs[$pointer + 1][1] = substr($insertion, $overlap_length1);
                         $pointer++;
@@ -486,10 +483,10 @@ class Htmldiff {
                 else {
                     if($overlap_length2 >= strlen($deletion) / 2 || 
                         $overlap_length2 >= strlen($insertion) / 2) {
-                        array_splice($diffs, $pointer, 0, array(array(DIFF_EQUAL, substr($deletion, 0, $overlap_length2))));
-                        $diffs[$pointer - 1][0] = DIFF_INSERT;
+                        array_splice($diffs, $pointer, 0, array(array(self::DIFF_EQUAL, substr($deletion, 0, $overlap_length2))));
+                        $diffs[$pointer - 1][0] = self::DIFF_INSERT;
                         $diffs[$pointer - 1][1] = substr($insertion, 0, strlen($insertion) - $overlap_length2);
-                        $diffs[$pointer + 1][0] = DIFF_DELETE;
+                        $diffs[$pointer + 1][0] = self::DIFF_DELETE;
                         $diffs[$pointer + 1][1] = substr($deletion, $overlap_length2);
                         $pointer++;
                     }
@@ -506,7 +503,7 @@ class Htmldiff {
         $pointer = 1;
 
         while($pointer < count($diffs) -1) {
-            if($diffs[$pointer -1][0] == DIFF_EQUAL && $diffs[$pointer + 1][0] == DIFF_EQUAL) {
+            if($diffs[$pointer -1][0] == self::DIFF_EQUAL && $diffs[$pointer + 1][0] == self::DIFF_EQUAL) {
                 $equality1 = $diffs[$pointer - 1][1];
                 $edit = $diffs[$pointer][1];
                 $equality2 = $diffs[$pointer + 1][1];
@@ -598,7 +595,7 @@ class Htmldiff {
 
     private function diff_cleanupMerge ($diffs) {
 
-        array_push($diffs, array(DIFF_EQUAL, ''));
+        array_push($diffs, array(self::DIFF_EQUAL, ''));
         $pointer = 0;
         $count_delete = 0;
         $count_insert = 0;
@@ -608,27 +605,27 @@ class Htmldiff {
 
         while($pointer < count($diffs)) {
             switch($diffs[$pointer][0]) {
-                case DIFF_INSERT:
+                case self::DIFF_INSERT:
                     $count_insert++;
                     $text_insert .= $diffs[$pointer][1];
                     $pointer++;
                     break;
-                case DIFF_DELETE:
+                case self::DIFF_DELETE:
                     $count_delete++;
                     $text_delete .= $diffs[$pointer][1];
                     $pointer++;
                     break;
-                case DIFF_EQUAL:
+                case self::DIFF_EQUAL:
                     if($count_delete + $count_insert > 1) {
                         if($count_delete !== 0 && $count_insert !== 0) {
                             $commonlength = $this->diff_commonPrefix($text_insert, $text_delete);
                             if($commonlength !== 0) {
                                 if(($pointer - $count_delete - $count_insert) > 0 &&
-                                    $diffs[$pointer - $count_delete - $count_insert - 1][0] == DIFF_EQUAL) {
+                                    $diffs[$pointer - $count_delete - $count_insert - 1][0] == self::DIFF_EQUAL) {
                                     $diffs[$pointer - $count_delete - $count_insert][1] .= substr($text_insert, 0, $commonlength);
                                 }
                                 else {
-                                    array_splice($diffs, 0, 0, array(array(DIFF_EQUAL, substr($text_insert, 0, $commonlength))));
+                                    array_splice($diffs, 0, 0, array(array(self::DIFF_EQUAL, substr($text_insert, 0, $commonlength))));
                                     $pointer++;
                                 }
                                 $text_insert = substr($text_insert, $commonlength);
@@ -644,17 +641,17 @@ class Htmldiff {
                         }
 
                         if($count_delete === 0) {
-                            array_splice($diffs, $pointer - $count_insert, $count_delete + $count_insert, array(array(DIFF_INSERT, $text_insert)));
+                            array_splice($diffs, $pointer - $count_insert, $count_delete + $count_insert, array(array(self::DIFF_INSERT, $text_insert)));
                         }
                         elseif($count_insert === 0) {
-                            array_splice($diffs, $pointer - $count_delete, $count_delete + $count_insert, array(array(DIFF_DELETE, $text_delete)));
+                            array_splice($diffs, $pointer - $count_delete, $count_delete + $count_insert, array(array(self::DIFF_DELETE, $text_delete)));
                         }
                         else {
-                            array_splice($diffs, $pointer - $count_delete - $count_insert, $count_delete + $count_insert, array(array(DIFF_DELETE, $text_delete), array(DIFF_INSERT, $text_insert)));
+                            array_splice($diffs, $pointer - $count_delete - $count_insert, $count_delete + $count_insert, array(array(self::DIFF_DELETE, $text_delete), array(self::DIFF_INSERT, $text_insert)));
                         }
                         $pointer = $pointer - $count_delete - $count_insert + ($count_delete ? 1 : 0) + ($count_insert ? 1 : 0) + 1;
                     }
-                    elseif($pointer !== 0 && $diffs[$pointer - 1][0] == DIFF_EQUAL) {
+                    elseif($pointer !== 0 && $diffs[$pointer - 1][0] == self::DIFF_EQUAL) {
                         $diffs[$pointer - 1][1] .= $diffs[$pointer][1];
                         array_splice($diffs, $pointer, 1);
                     }
@@ -677,7 +674,7 @@ class Htmldiff {
         $pointer = 1;
 
         while($pointer < count($diffs) - 1) {
-            if($diffs[$pointer -1][0] == DIFF_EQUAL && $diffs[$pointer + 1][0] == DIFF_EQUAL) {
+            if($diffs[$pointer -1][0] == self::DIFF_EQUAL && $diffs[$pointer + 1][0] == self::DIFF_EQUAL) {
                 if(substr($diffs[$pointer][1], strlen($diffs[$pointer][1]) - strlen($diffs[$pointer - 1][1])) == $diffs[$pointer - 1][1]) {
                     $diffs[$pointer][1] = $diffs[$pointer - 1][1].substr($diffs[$pointer][1], 0, strlen($diffs[$pointer][1]) - strlen($diffs[$pointer - 1][1]));
                     $diffs[$pointer + 1][1] = $diffs[$pointer - 1][1].$diffs[$pointer + 1][1];
