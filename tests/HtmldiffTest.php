@@ -10,6 +10,7 @@ class HtmldiffTest extends PHPUnit_Framework_TestCase
         $htmldiff = new Htmldiff;
         $result = $htmldiff->compare("Test", "Testing", true);
 
-        $this->assertEquals("<del>Test</del><ins>Testing</ins>", $result);
+        $expected = '<del class="html-diff-del">Test</del><ins class="html-diff-ins">Testing</ins>';
+        $this->assertEquals($expected, $result);
     }
 }
