@@ -26,7 +26,7 @@ class Htmldiff {
 
     private $whole_tag = false;
 
-    var $match = array(
+    public $match = array(
         'nonAlphaNumericRegex' => '/[^a-zA-Z0-9]/',
         'whitespaceRegex' => '/\s/',
         'linebreakRegex' => '/[\r\n]/',
