@@ -122,3 +122,18 @@ elit. Suspendisse molestie sem eleifend arcu dignissim rutrum.
 </tr>
 </tbody>
 </table>';
+
+$text1 = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas 
+consequat felis eu lectus volutpat congue. Fusce nec massa eget risus 
+commodo convallis a in metus. Nam rhoncus sed enim aliquam tincidunt. 
+Donec pretium eros nec dui cursus ullamcorper. Donec vel dignissim elit.
+ Vivamus aliquet nec lectus et aliquet. Proin id rutrum est. Integer 
+suscipit dolor ornare, hendrerit enim in, lacinia neque. Ut id nulla 
+elit. Suspendisse molestie sem eleifend arcu dignissim rutrum.';
+$text2 = 'Lorem dolor sit amet, consectetur adipiscing elit. Maecenas 
+consequat felis eu lectus volutpat congue. Fusce nec massa eget risus 
+commodo convallis a in metus. Nam rhoncus sed enim aliquam tincidunt. 
+Donec pretium eros nec dui cursus ullamcorper. Donec vel dignissim elit.
+ Vivamus aliquet nec lectus et aliquet. Proin id rutrum est. Integer 
+suscipit dolor ornare, hendrerit enim in, lacinia neque. Ut id nulla 
+elit. Suspendisse molestie sem eleifend arcu dignissim rutrum.';

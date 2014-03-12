@@ -1,6 +1,8 @@
 <?php
+
 namespace Gathercontent\Htmldiff;
-class HTMLDiff {
+
+class Htmldiff {
 
     private $attributes = array();
 
@@ -160,8 +162,9 @@ class HTMLDiff {
             $this->old = $old;
             $this->new = $new;
 
-            $diff = new FineDiff($this->old, $this->new, FineDiff::$wordGranularity);
-            return $diff->renderDiffToHTML();
+            $granularity = new \cogpowered\FineDiff\Granularity\Word;
+            $diff        = new \cogpowered\FineDiff\Diff($granularity);
+            return $diff->render($this->old, $this->new);
         }
         else {
 
