@@ -4,4 +4,4 @@ php:
   - 5.3
 
 before_script:
-  - php composer.phar install --prefer-source --no-interaction --dev
+  - composer update
