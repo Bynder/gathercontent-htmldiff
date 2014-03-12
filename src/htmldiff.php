@@ -1,5 +1,5 @@
 <?php
-
+namespace Gathercontent\Htmldiff;
 class HTMLDiff {
 
     private $attributes = array();
