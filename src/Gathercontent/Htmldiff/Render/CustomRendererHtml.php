@@ -20,7 +20,7 @@ namespace Gathercontent\Htmldiff\Render;
 
 use cogpowered\FineDiff\Parser\OpcodeInterface;
 
-class CustomRenderer extends \cogpowered\FineDiff\Render\Renderer
+class CustomRendererHtml extends \cogpowered\FineDiff\Render\Renderer
 {
     public function callback($opcode, $from, $from_offset, $from_len)
     {

@@ -51,13 +51,13 @@ class Htmldiff {
         return (string) $tidy;
     }
 
-    private function recursive_get_nodes(array $return, DOMElement $parent, $depth = 1, $prefix='') {
+    private function recursive_get_nodes(array $return, \DOMElement $parent, $depth = 1, $prefix='') {
 
         $last_element = '';
 
         foreach($parent->childNodes as $node) {
 
-            if($node instanceof DomElement) {
+            if($node instanceof \DomElement) {
 
                 $new_prefix = $prefix.$node->localName;
 
@@ -89,7 +89,7 @@ class Htmldiff {
                     $return[] = $new_prefix;
                 }
             }
-            elseif($node instanceof DomText) {
+            elseif($node instanceof \DomText) {
                 $trimmed = trim($node->wholeText);
                 if(empty($trimmed)) {
                     continue;
@@ -140,7 +140,7 @@ class Htmldiff {
 
         $html = str_replace(array("\r\n","\n"),'',$this->clean_html($html));
 
-        $doc = new DOMDocument('1.0', 'UTF-8');
+        $doc = new \DOMDocument('1.0', 'UTF-8');
         $doc->loadHTML($html);
         $html = $doc->getElementsByTagName('body')->item(0);
 
@@ -163,7 +163,9 @@ class Htmldiff {
             $this->new = $new;
 
             $granularity = new \cogpowered\FineDiff\Granularity\Word;
-            $diff        = new \cogpowered\FineDiff\Diff($granularity);
+            $renderer    = new \Gathercontent\Htmldiff\Render\CustomRendererPlain;
+
+            $diff = new \cogpowered\FineDiff\Diff($granularity, $renderer);
             return $diff->render($this->old, $this->new);
         }
         else {
@@ -171,8 +173,11 @@ class Htmldiff {
             $this->old = implode("\n", $this->html_to_array($old));
             $this->new = implode("\n", $this->html_to_array($new));
 
-            $diff = new FineDiff($this->old, $this->new, FineDiff::$paragraphGranularity);
-            $this->diff_string = $diff->renderDiffToCustom();
+            $granularity = new \cogpowered\FineDiff\Granularity\Paragraph;
+            $renderer    = new \Gathercontent\Htmldiff\Render\CustomRendererHtml;
+
+            $diff = new \cogpowered\FineDiff\Diff($granularity, $renderer);
+            $this->diff_string = $diff->render($this->old, $this->new);
 
             $this->generate_output();
 
