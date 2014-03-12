@@ -1,5 +1,5 @@
 <?php
-require_once(APPPATH.'third_party/finediff/finediff.php');
+
 class HTMLDiff {
 
     private $attributes = array();
