@@ -1,0 +1,28 @@
+{
+    "name": "gathercontent/htmldiff",
+    "description": "Compare two HTML strings",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mathew Chapman",
+            "email": "mat@gathercontent.com"
+        },
+        {
+            "name": "Peter Legierski",
+            "email": "peter@gathercontent.com"
+        },
+        {
+            "name": "Andrew Cairns",
+            "email": "andrew@gathercontent.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "4.*",
+        "squizlabs/php_codesniffer": "1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Gathercontent\\Htmldiff": "src/"
+        }
+    }
+}
