@@ -1,6 +1,6 @@
 <?php
 
-namespace Gathercontent\Htmldiff;
+namespace GatherContent\Htmldiff;
 
 class Htmldiff {
 
@@ -160,7 +160,7 @@ class Htmldiff {
             $this->new = $new;
 
             $granularity = new \cogpowered\FineDiff\Granularity\Word;
-            $renderer    = new \Gathercontent\Htmldiff\Render\CustomRendererPlain;
+            $renderer    = new \GatherContent\Htmldiff\Render\CustomRendererPlain;
 
             $diff = new \cogpowered\FineDiff\Diff($granularity, $renderer);
             return $diff->render($this->old, $this->new);
@@ -171,7 +171,7 @@ class Htmldiff {
             $this->new = implode("\n", $this->html_to_array($new));
 
             $granularity = new \cogpowered\FineDiff\Granularity\Paragraph;
-            $renderer    = new \Gathercontent\Htmldiff\Render\CustomRendererHtml;
+            $renderer    = new \GatherContent\Htmldiff\Render\CustomRendererHtml;
 
             $diff = new \cogpowered\FineDiff\Diff($granularity, $renderer);
             $this->diff_string = $diff->render($this->old, $this->new);

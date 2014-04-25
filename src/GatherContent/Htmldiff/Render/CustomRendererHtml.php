@@ -16,7 +16,7 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-namespace Gathercontent\Htmldiff\Render;
+namespace GatherContent\Htmldiff\Render;
 
 use cogpowered\FineDiff\Parser\OpcodeInterface;
 
