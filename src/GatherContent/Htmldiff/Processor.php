@@ -78,7 +78,7 @@ class Processor implements ProcessorInterface
 
         foreach ($lines as $line) {
 
-            $result = preg_match('/([+-\s])(<.*>)(.*)/', $line, $lineParts);
+            $result = preg_match('/([+\-\s])(<.*>)(.*)/', $line, $lineParts);
 
             if ($result == 1) {
 
